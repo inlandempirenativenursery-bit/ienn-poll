@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#4a5a4a">
+<title>3 quick questions – Inland Empire Native Nursery</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="poll.css">
+</head>
+<body>
+<main id="app">
+  <section class="screen" id="s-intro" aria-labelledby="intro-h">
+    <h1 id="intro-h">3 quick questions about California native plants. Takes 20 seconds.</h1>
+    <button type="button" class="primary" id="start">Start</button>
+  </section>
+
+  <section class="screen" id="s-q" hidden aria-live="polite">
+    <div class="top">
+      <button type="button" class="back" id="back">&larr; Back</button>
+      <span class="progress" id="progress">1 of 3</span>
+    </div>
+    <div class="bar" aria-hidden="true"><span id="bar-fill"></span></div>
+    <h2 id="q-text"></h2>
+    <div class="scale" role="radiogroup" aria-labelledby="q-text" id="scale">
+      <button type="button" role="radio" data-v="1"><b>1</b><span>Strongly disagree</span></button>
+      <button type="button" role="radio" data-v="2"><b>2</b><span>Disagree</span></button>
+      <button type="button" role="radio" data-v="3"><b>3</b><span>Neutral</span></button>
+      <button type="button" role="radio" data-v="4"><b>4</b><span>Agree</span></button>
+      <button type="button" role="radio" data-v="5"><b>5</b><span>Strongly agree</span></button>
+    </div>
+  </section>
+
+  <section class="screen" id="s-thanks" hidden>
+    <img class="logo" src="ienn-logo.jpg" width="600" height="744" alt="Inland Empire Native Nursery logo">
+    <p class="thanks">Thanks! — Inland Empire Native Nursery</p>
+    <p class="ig">@inlandempirenativenursery</p>
+  </section>
+</main>
+<noscript><p class="noscript">Please turn on JavaScript to answer the 3 questions.</p></noscript>
+<script src="poll.js"></script>
+</body>
+</html>
