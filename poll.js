@@ -1,7 +1,7 @@
 /* IENN anonymous 3-question poll. No trackers, no personal data. */
 
-// >>> PLACEHOLDER: Lobo is building the Apps Script endpoint. Paste its /exec URL here. <<<
-const ENDPOINT_URL = 'REPLACE_WITH_APPS_SCRIPT_EXEC_URL';
+// Apps Script web app (Lobo). Contract: text/plain JSON {response_id, q1, q2, q3, src} -> {ok:true} | {ok:false, error}
+const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbyxx4vGOow0OKdfO8RbxlR5Swr7iBvSpdwDbPb_stTcJ5uhUUg7JUteAEEugssmMoh9/exec';
 
 (function () {
   'use strict';
@@ -34,7 +34,7 @@ const ENDPOINT_URL = 'REPLACE_WITH_APPS_SCRIPT_EXEC_URL';
   function srcTag() {
     var s = '';
     try { s = new URLSearchParams(location.search).get('src') || ''; } catch (e) {}
-    s = s.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 40);
+    s = s.trim().toLowerCase().replace(/_/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 32);
     return s || DEFAULT_SRC;
   }
 
@@ -48,13 +48,23 @@ const ENDPOINT_URL = 'REPLACE_WITH_APPS_SCRIPT_EXEC_URL';
   }
   function endpointReady() { return /^https:\/\//.test(ENDPOINT_URL); }
 
+  function isValid(p) {
+    function q(v) { return v === 1 || v === 2 || v === 3 || v === 4 || v === 5; }
+    return /^[A-Za-z0-9_-]{8,64}$/.test(p.response_id) && q(p.q1) && q(p.q2) && q(p.q3) && /^[a-z0-9-]{1,32}$/.test(p.src);
+  }
+
+  // Resolves 'ok' or 'rejected' (server said ok:false: permanent, drop it). Rejects on network/CORS failure (keep queued).
   function post(payload) {
     if (!endpointReady()) return Promise.reject(new Error('endpoint not set'));
-    // text/plain body = "simple" CORS request, no preflight (works with Apps Script doPost).
+    // text/plain body = "simple" CORS request, no preflight. Apps Script answers with Access-Control-Allow-Origin: *.
     return fetch(ENDPOINT_URL, {
-      method: 'POST', mode: 'no-cors', cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer',
+      method: 'POST', mode: 'cors', cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer', redirect: 'follow',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ response_id: payload.response_id, q1: payload.q1, q2: payload.q2, q3: payload.q3, src: payload.src })
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j && j.ok === true) return 'ok';
+      if (j && j.ok === false) return 'rejected';
+      throw new Error('unexpected response');
     });
   }
 
@@ -67,6 +77,7 @@ const ENDPOINT_URL = 'REPLACE_WITH_APPS_SCRIPT_EXEC_URL';
     if (navigator.onLine === false) return; // wait for 'online' or next load
     flushing = true;
     var item = q[0];
+    if (!isValid(item)) { writeQueue(readQueue().slice(1)); flushing = false; flush(0); return; }
     post(item).then(function () {
       var rest = readQueue().filter(function (p) { return !(p.response_id === item.response_id && p.ts === item.ts); });
       writeQueue(rest); flushing = false;
@@ -120,7 +131,7 @@ const ENDPOINT_URL = 'REPLACE_WITH_APPS_SCRIPT_EXEC_URL';
 
   function finish() {
     var payload = { response_id: responseId(), q1: answers[0], q2: answers[1], q3: answers[2], src: srcTag(), ts: Date.now() };
-    enqueue(payload);
+    if (isValid(payload)) enqueue(payload);
     show('s-thanks');
     flush(0);
   }

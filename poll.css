@@ -32,3 +32,26 @@ button { font:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent; 
 .ig { color:var(--sage); font-size:1rem; }
 .noscript { padding:1rem; text-align:center; }
 @media (prefers-reduced-motion:reduce) { .bar span { transition:none; } }
+
+/* California poppy (Eschscholzia californica) bloom on the thank-you screen. Inline SVG + CSS only.
+   Base styles are the finished bloom; keyframes animate *from* the sprout, so reduced motion simply shows the bloom. */
+.poppy { display:block; width:104px; height:139px; margin:0 auto -0.5rem; overflow:visible; }
+.poppy * { transform-box:view-box; transform-origin:0 0; }
+.pp-stem { fill:none; stroke:#7f988a; stroke-width:2.4; stroke-linecap:round; stroke-dasharray:1; stroke-dashoffset:0; animation:pp-grow 1.2s cubic-bezier(.3,.6,.4,1) both; }
+.pp-leaf { fill:none; stroke:#8fa89b; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(var(--s)); animation:pp-unfurl .9s cubic-bezier(.2,.8,.3,1) var(--d) both; }
+.pp-torus { fill:#a9bba9; animation:pp-fade .3s ease-out 1.25s both; }
+.pp-petal { transform:translate(60px,65px) rotate(var(--r)) scale(var(--sx),1); animation:pp-open 1.05s cubic-bezier(.25,.9,.35,1.05) var(--d) both; }
+.pp-bud { fill:#9fb3a6; stroke:#7f988a; stroke-width:.6; opacity:0; transform:translate(60px,34px); animation:pp-bud 2.5s ease-in-out both; }
+@keyframes pp-grow { from { stroke-dashoffset:1; } }
+@keyframes pp-unfurl { from { transform:translate(var(--x),var(--y)) rotate(calc(var(--r) * 0.2)) scale(0); } }
+@keyframes pp-fade { from { opacity:0; } }
+@keyframes pp-open {
+  from { transform:translate(60px,65px) rotate(calc(var(--r) * 0.1)) scale(.22,.62); opacity:0; }
+  25% { opacity:1; }
+}
+@keyframes pp-bud {
+  0%, 44% { transform:translate(60px,66px) scale(0); opacity:1; }
+  64%, 80% { transform:translate(60px,66px) scale(1); opacity:1; }
+  100% { transform:translate(60px,34px) scale(.9); opacity:0; }
+}
+@media (prefers-reduced-motion:reduce) { .poppy, .poppy * { animation:none !important; } }
