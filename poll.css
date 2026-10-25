@@ -6,7 +6,7 @@ body { font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Rob
 #app { min-height:100%; max-width:480px; margin:0 auto; padding:max(1.25rem, env(safe-area-inset-top)) 1.1rem max(1.25rem, env(safe-area-inset-bottom)); display:flex; }
 .screen { flex:1; display:flex; flex-direction:column; gap:1.1rem; }
 .screen[hidden] { display:none; }
-#s-intro { justify-content:center; text-align:center; border-top:6px solid var(--lilac); padding-top:2rem; }
+#s-intro { justify-content:center; align-items:stretch; text-align:center; border-top:6px solid var(--lilac); padding-top:2rem; gap:1.6rem; }
 h1 { font-size:1.6rem; line-height:1.3; color:var(--sage-dark); }
 h2 { font-size:1.4rem; line-height:1.3; color:var(--sage-dark); min-height:5.5rem; }
 button { font:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
@@ -25,7 +25,9 @@ button { font:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent; 
 .scale button[aria-checked="true"] b { background:var(--lilac); }
 .scale button:focus-visible, .primary:focus-visible, .back:focus-visible { outline:3px solid var(--lilac); outline-offset:2px; }
 #s-thanks { justify-content:center; align-items:center; text-align:center; }
-.logo { width:min(70vw, 260px); height:auto; }
+/* Logo sits on a white panel: the logo file's own background is white (#fff), so no box edge shows inside the panel. */
+.logo-panel { width:100%; background:#fff; border-radius:16px; box-shadow:0 1px 3px rgba(74,90,74,.12); padding:0.6rem; } /* padding keeps the rounded corners off the image: nothing is clipped */
+.logo { display:block; width:100%; height:auto; }
 .thanks { font-size:1.35rem; font-weight:700; color:var(--sage-dark); }
 .ig { color:var(--sage); font-size:1rem; }
 .noscript { padding:1rem; text-align:center; }

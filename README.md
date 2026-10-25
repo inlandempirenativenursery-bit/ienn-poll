@@ -9,4 +9,4 @@ Standalone, anonymous 3-question poll for Inland Empire Native Nursery, used in 
 - `response_id` is a random `crypto.randomUUID()` kept in localStorage, so a re-take on the same phone sends the same ID. The endpoint should **upsert by response_id** so the newer answer replaces the older one.
 - `src` comes from `?src=` (lowercase letters, digits, `-` and `_`, max 40 characters) and defaults to `jerky-promo`.
 - No personal data is collected: no name, email, phone or location. The endpoint shouldn't log IP addresses.
-- The logo is the approved IMG_2773 (scaled copy only). The favicon is the circle icon, scaled.
+- The logo is the approved horizontal logo (`ienn-logo-horizontal.jpg`), shown as an 800px scaled copy only: no cropping, recoloring or background removal. It sits on a white panel that matches its own white background. The favicon is the circle icon, scaled.
